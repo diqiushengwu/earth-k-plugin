@@ -15,7 +15,7 @@ export class Help extends plugin {
       priority: 1146,
       rule: [
         {
-          reg: "^#?(土块|土堆|泥土|土|赌怪)?(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
+          reg: "^#?(土块|土堆|泥土|土|赌怪)?(命令|帮助|菜单|help|说明|功能|指令|使用说明)$|^/土块帮助$",
           fnc: 'help'
         },
         {

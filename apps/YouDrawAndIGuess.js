@@ -1,4 +1,3 @@
-import { segment } from "oicq";
 import fetch from "node-fetch";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 let ml = process.cwd()
@@ -39,11 +38,39 @@ export class YouDrawAndIGuess extends plugin {
             }, {
                 reg: "^#结束你画我猜$",
                 fnc: 'jsyx'
+            }, {
+                reg: "^发词$|^写答案(.*)",
+                fnc: 'kct'
             }
 
             ]
         })
     }
+	
+	async kct(e) {
+		if(fq == 0){
+			return false
+		}
+		console.log(huihe)
+		if(e.user_id == wanjia[huihe] & e.msg == '发词'){
+			
+			e.reply(daan)
+			
+			
+		}
+		if(e.user_id == wanjia[huihe] & e.msg.includes('写答案')){
+			
+			
+			daan = e.msg.replace(/写答案/g, "").trim();
+			e.reply('您已设置本轮答案为'+ daan)
+			
+			
+		}
+		return false
+		
+	}
+
+	
     async jsyx(e) {
         if (e.user_id == zhuren) {
             e.reply('你画我猜已结束')
@@ -92,7 +119,7 @@ export class YouDrawAndIGuess extends plugin {
                 e.reply(msg)
                 renshu = wanjia.length
 
-                wjname[wanjia.length - 1] = e.member?.card ? e.member.card : e.member?.nickname
+                wjname[wanjia.length - 1] = e.author.username
 
             }
             if (game == 1) {
@@ -118,7 +145,7 @@ export class YouDrawAndIGuess extends plugin {
             if (wj.indexOf(e.user_id) == -1 & game == 1) {
                 wj[wj.length] = e.user_id
                 fen[fen.length] = 0
-                wjname1[wjname1.length] = e.member.card
+                wjname1[wjname1.length] = e.author.username
                 console.log(wjname1[0])
             }
             let caice = e.msg.replace(/猜测/g, "").trim();
@@ -150,7 +177,7 @@ export class YouDrawAndIGuess extends plugin {
                 });
                 e.reply(img)
 
-                Bot.pickGroup(qun).sendMsg(["恭喜", segment.at(e.user_id), '回答正确，加1分']);
+                e.reply(["恭喜", segment.at(e.user_id), '回答正确，加1分']);
 
                 let i = Math.floor(Math.random() * ciku.length);
                 if (lunci == 1 & huihe == wanjia.length) {
@@ -178,9 +205,8 @@ export class YouDrawAndIGuess extends plugin {
                 }
 
                 let tp = segment.image('https://c2cpicdw.qpic.cn/offpic_new/0//1142407413-3587893631-F7E9A2A13278357600BB7B7E8895DD26/0')
-                e.reply(['正确答案是：' + daan + '\n现在进入下一轮', '\n当前画画:', segment.at(wanjia[huihe]), tp])
-                Bot.pickUser(wanjia[huihe]).sendMsg(ciku[i]);
-                Bot.pickMember(e.group_id, wanjia[huihe]).sendMsg(ciku[i]);
+                e.reply(['正确答案是：' + daan + '\n现在进入下一轮', '\n当前画画:', segment.at(wanjia[huihe]),'请私信机器人发送 发词,或者发送 写答案+你出的词', tp])
+              
                 daan = ciku[i]
                 console.log(daan)
                 ciku.splice(i, 1)
@@ -190,7 +216,7 @@ export class YouDrawAndIGuess extends plugin {
 
         if (game == 0 & e.msg == '#开始你画我猜' & fq == 1) {
             let tp = segment.image('https://c2cpicdw.qpic.cn/offpic_new/0//1142407413-3587893631-F7E9A2A13278357600BB7B7E8895DD26/0')
-            e.reply([tp, '\n你画我猜已开始，请点击白布图片后，点击右下方的笔开始画画'])
+            e.reply([tp, '\n你画我猜已开始，请点击白布图片后，点击右下方的笔开始画画,请私信机器人发送 发词,或者发送 写答案+你出的词'])
             let i = Math.floor(Math.random() * ciku.length);
             daan = ciku[i]
             let msg2 = '以下为玩家对应的号码数'
@@ -198,8 +224,7 @@ export class YouDrawAndIGuess extends plugin {
                 msg2 = msg2 + '\n' + String(i + 1) + '号：' + wjname[i]
             }
             e.reply([msg2, '\n当前画画:', segment.at(wanjia[huihe])])
-            Bot.pickUser(wanjia[0]).sendMsg(ciku[i]);
-            Bot.pickMember(e.group_id, wanjia[0]).sendMsg(ciku[i]);
+            
             console.log(daan)
             ciku.splice(i, 1)
             game = 1
