@@ -19,6 +19,7 @@ let zhuren
 let qun = 0
 let touzi = ""
 let zon = []
+
 export class tzl extends plugin {
     constructor() {
         super({
