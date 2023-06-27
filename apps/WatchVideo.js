@@ -123,7 +123,12 @@ export class WatchVideo extends plugin {
 		if (e.msg.includes("#选视频")) {
 			k = e.msg.replace(/#选视频/g, "").trim()
 			msg = bt + msg2[Number(k) - 1] + '\n' + 'https://jx.bozrc.com:4433/player/?url=' + msg3[Number(k) - 1]
-			e.reply(msg)
+			//
+			let url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+'https://jx.bozrc.com:4433/player/?url=' + msg3[Number(k) - 1]
+			
+			
+			
+			e.reply(segment.image(url))
 		}
 		return true;//返回true 阻挡消息不再往下
 	}

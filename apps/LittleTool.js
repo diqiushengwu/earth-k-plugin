@@ -1,7 +1,6 @@
 import fetch from "node-fetch";
 import { createRequire } from 'module'
 import fs from "fs";
-
 const require = createRequire(import.meta.url)
 const _path = process.cwd();
 var http = require('http');
@@ -10,16 +9,19 @@ let kg = 0
 let bqhc = 1
 let msgData = []
 //1.定义命令规则
+
+
+
 export class xgn extends plugin {
   constructor() {
     super({
       /** 功能名称 */
-      name: '小功能',
+      name: '小功22能',
       /** 功能描述 */
-      dsc: '小功能',
+      dsc: '小22功能',
       event: 'message',
       /** 优先级,数字越小等级越高 */
-      priority: 1045,
+      priority: 125,
       rule: [{
         /** 命令正则匹配 */
         reg: /^\p{Emoji_Presentation}{2}$/gum, //匹配消息正则,命令正则
@@ -27,7 +29,7 @@ export class xgn extends plugin {
         fnc: 'bqhc'
       }, {
         /** 命令正则匹配 */
-        reg: '#今日运势', //匹配消息正则,命令正则
+        reg: '(#|/)今日运势', //匹配消息正则,命令正则
         /** 执行方法 */
         fnc: 'jrys'
       }, {
@@ -54,6 +56,8 @@ export class xgn extends plugin {
       ]
     })
   }
+  
+
   async bqhckg (e) {
     if (!e.isMaster) return
 
@@ -191,19 +195,58 @@ export class xgn extends plugin {
     console.log(res)
   }
   async jrys (e) {
-     let url = 'https://tukuai.ddns.net:1450/jrys.php?&qq=' + String(e.user_id)
+	  console.log(e.user_id,1233123123)
+     let url = 'https://tukuai.ddns.net:1450/jrys.php?&qq=' + String(e.user_id).slice(0, 8)
         let res = await fetch(url)
         res = await res.json()
+		console.log(res)
 
         let fortuneSummary = res.fortuneSummary
         let luckyStar = res.luckyStar
         let signText = res.signText
         let unSignText = res.unSignText
-        let msg = ["运势：", fortuneSummary,
-            "\n星级：", luckyStar,
-            "\n点评：", signText,
-            "\n解读：", unSignText,]
-        e.reply([segment.at(e.user_id),'\n',msg])
+        let msg = "运势："+fortuneSummary+
+            "\n星级："+luckyStar+
+            "\n点评："+ signText+
+            "\n解读："+ unSignText
+            try{
+              let xiaoxi = await e.bot.api.messageApi.postMessage(e.channel_id, {
+                embed: {
+                  title: e.author.username+'的今日运势',
+                  prompt: '消息通知',
+                  thumbnail: {
+                    url: e.author.avatar
+                  },
+                  fields: [
+                    {
+                      name: "运势："+fortuneSummary,
+                    },
+                    {
+                      name: "星级："+luckyStar,
+                    },
+                    {
+                      name: "点评："+ signText,
+                    },{
+                      name: "解读："+ unSignText,
+                    }
+                  ],
+                },
+              });
+            }catch
+            {
+
+              e.reply(msg)
+            }
+			
+		
+    
+
+
+
+
+
+
+      
   }
 
   async bqhc (e) {
