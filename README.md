@@ -1,4 +1,4 @@
-# Earth-K-Plugin
+# Earth-K-Plugin（QQ频道插件）
 
 ## 需要配置FFmpeg变量才能正常使用点歌、猜语音、角色语音等功能
 
