@@ -3840,7 +3840,7 @@ export class GenshinHistory extends plugin {
             priority: 1145,
             rule: [{
                 /** 命令正则匹配 */
-                reg: "^/原史(.*)$", //匹配消息正则,命令正则
+                reg: "^#原史(.*)$", //匹配消息正则,命令正则
                 /** 执行方法 */
                 fnc: 'hqgs'
             }
@@ -3856,52 +3856,52 @@ export class GenshinHistory extends plugin {
         let id3 = []
         let qsid = 0
         if (e.msg.includes("目录")) {
-            if (e.msg.includes("/原史角色目录")) {
+            if (e.msg.includes("#原史角色目录")) {
 
                 id3 = id2.slice(0, 55)
                 qsid = 0
 
             }
-            if (e.msg.includes("/原史武器目录")) {
+            if (e.msg.includes("#原史武器目录")) {
 
                 id3 = id2.slice(55, 196)
                 qsid = 55
 
             }
-            if (e.msg.includes("/原史圣遗物目录")) {
+            if (e.msg.includes("#原史圣遗物目录")) {
 
                 id3 = id2.slice(196, 237)
                 qsid = 196
             }
-            if (e.msg.includes("/原史怪物目录")) {
+            if (e.msg.includes("#原史怪物目录")) {
 
                 id3 = id2.slice(238, 386)
                 qsid = 238
 
             }
-            if (e.msg.includes("/原史任务目录")) {
+            if (e.msg.includes("#原史任务目录")) {
                 id3 = id2.slice(1322, 1565)
                 qsid = 1322
             }
-            if (e.msg.includes("/原史食物目录")) {
+            if (e.msg.includes("#原史食物目录")) {
 
                 id3 = id2.slice(387, 532)
                 qsid = 387
             }
-            if (e.msg.includes("/原史物品目录")) {
+            if (e.msg.includes("#原史物品目录")) {
 
                 id3 = id2.slice(533, 1237)
                 qsid = 533
 
 
             }
-            if (e.msg.includes("/原史活动目录")) {
+            if (e.msg.includes("#原史活动目录")) {
 
                 id3 = id2.slice(1238, 1321)
                 qsid = 1238
 
             }
-            if (e.msg.includes("/原史动物目录")) {
+            if (e.msg.includes("#原史动物目录")) {
 
                 id3 = id2.slice(1566, 1674)
                 qsid = 1566
@@ -3909,14 +3909,14 @@ export class GenshinHistory extends plugin {
 
             }
 
-            if (e.msg.includes("/原史书籍目录")) {
+            if (e.msg.includes("#原史书籍目录")) {
 
                 id3 = id2.slice(1675, 1731)
                 qsid = 1675
 
 
             }
-            if (e.msg.includes("/原史npc目录")) {
+            if (e.msg.includes("#原史npc目录")) {
 
                 id3 = id2.slice(1949, 2647)
                 qsid = 1949
@@ -3944,7 +3944,7 @@ export class GenshinHistory extends plugin {
 
         let name = e.msg
         let n = ""
-        let name1 = name.replace(/\/原史/g, "").trim()
+        let name1 = name.replace(/#原史/g, "").trim()
         let li = fs.readFileSync('./plugins/earth-k-plugin/resources/json/mohu/mohu.json', 'utf-8')
         li = JSON.parse(li)
 
@@ -3977,8 +3977,8 @@ export class GenshinHistory extends plugin {
 
 
 
-        if (e.msg.includes("/原史id")) {
-            n = name.replace(/\/原史id/g, "").trim()
+        if (e.msg.includes("#原史id")) {
+            n = name.replace(/#原史id/g, "").trim()
             e.reply(syid[n - 1].title)
 
         }

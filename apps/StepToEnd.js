@@ -22,16 +22,16 @@ export class yzdd extends plugin {
             event: 'message',
             priority: 1145,
             rule: [{
-                reg: "^#加入一站到底$|/加入一站到底",
+                reg: "^#加入一站到底$",
                 fnc: 'jryx'
             }, {
                 reg: "^#开始一站到底$|^答(.*)",
                 fnc: 'ksyx'
             }, {
-                reg: "^#发起一站到底$|^/发起一站到底$",
+                reg: "^#发起一站到底$",
                 fnc: 'jryx'
             }, {
-                reg: "^#结束一站到底$|^/结束一站到底$",
+                reg: "^#结束一站到底$",
                 fnc: 'jsyx'
             }
 

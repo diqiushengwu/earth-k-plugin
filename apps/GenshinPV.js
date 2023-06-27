@@ -15,11 +15,11 @@ export class GenshinPV extends plugin {
             /** 优先级，数字越小等级越高 */
             priority: 1146,
             rule: [{
-                reg: "^(#|/)角色视频列表$|^(#|/)角色视频(.*)$", //匹配消息正则，命令正则
+                reg: "^#角色视频列表$|^#角色视频(.*)$", //匹配消息正则，命令正则
                 /** 执行方法 */
                 fnc: 'cspv'
             }, {
-                reg: "^(#|/)过场动画列表$|^(#|/)过场动画(.*)$", //匹配消息正则，命令正则
+                reg: "^#过场动画列表$|^#过场动画(.*)$", //匹配消息正则，命令正则
                 /** 执行方法 */
                 fnc: 'gcdh'
             }
@@ -34,7 +34,7 @@ export class GenshinPV extends plugin {
 
         let jslb = response2.data.list[0].children[2].list
 
-        if (e.msg == '#过场动画列表' | e.msg == '/过场动画列表') {
+        if (e.msg == '#过场动画列表') {
 
             data1 = {
                 tplFile: './plugins/earth-k-plugin/resources/html/GenshinHistory/ml.html',
@@ -50,11 +50,11 @@ export class GenshinPV extends plugin {
             return
         }
 
-        if (e.msg.includes('过场动画')) {
+        if (e.msg.includes('#过场动画')) {
             let sp = []
 
             let id = e.msg.replace(/#过场动画/g, "").trim()
-             id = e.msg.replace(/\/过场动画/g, "").trim()
+
             if (Number(id) < 1) {
                 e.reply('你这不行，不对')
                 return
@@ -88,22 +88,12 @@ export class GenshinPV extends plugin {
 
             if (kg == 1) {
                 e.reply('我知道你很急，但你别急，先看这个吧')
-                let url44 = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + sp
-			
-			
-			
-			e.reply(segment.image(url44))
+                await SendMusicShare(e, { source: 'mys', name: spmz, artist: '原神', link: sp })
                 return
             }
             kg = 1
             e.reply(spmz + '王大队长，等一下，视频马上就来,你可以先看这个')
-			
-			let url44 = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + sp
-			
-			
-			
-			e.reply(segment.image(url44))
-          
+            await SendMusicShare(e, { source: 'mys', name: spmz, artist: '原神', link: sp })
             //	console.log(response.data.content.content)
             //let jieguo = response.data.content.content
             //let sp = jieguo.match(/<video src="(.*?).mp4/g);
@@ -115,11 +105,27 @@ export class GenshinPV extends plugin {
             //e.reply('好的，请稍等哦')
 
 
-           
+            await fetch(sp, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                },
+            }).then(res => res.buffer()).then(_ => {
+                fs.writeFile("./resources/pv.mp4", _, "binary", function (err) {
+                    if (err)
+                        console.error(err);
+                    else
+                        console.log("下载成功");
+                });
+            })
+
+            let msg = segment.video('./resources/pv.mp4')
             kg = 0
 
             await e.reply(msg)
-           
+            e.reply('哎诶诶，视频来咯~~~')
+            await sleep(1000)
+            fs.unlinkSync('./resources/pv.mp4')
 
         }
 
@@ -131,7 +137,7 @@ export class GenshinPV extends plugin {
 
         let jslb = response2.data.list[0].children[0].list
 
-        if (e.msg == '#角色视频列表' | e.msg == '/角色视频列表') {
+        if (e.msg == '#角色视频列表') {
 
             data1 = {
                 tplFile: './plugins/earth-k-plugin/resources/html/GenshinHistory/ml.html',
@@ -146,13 +152,13 @@ export class GenshinPV extends plugin {
             return
         }
 
-        if (e.msg.includes('角色视频')) {
+        if (e.msg.includes('#角色视频')) {
             let sp = []
 
 
 
             let id = e.msg.replace(/#角色视频/g, "").trim()
-              id = e.msg.replace(/\/角色视频/g, "").trim()
+
             if (Number(id) < 1) {
                 e.reply('你这不行，不对')
                 return
@@ -185,22 +191,14 @@ export class GenshinPV extends plugin {
             }
             if (kg == 1) {
                 e.reply('我知道你很急，但你别急，先看这个吧，QAQ')
-                let url44 = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + sp
-			
-			
-			
-			e.reply(segment.image(url44))
+                await SendMusicShare(e, { source: 'mys', name: spmz, artist: '原神', link: sp })
                 return
             }
             kg = 1
 
 
             e.reply(spmz + '王大队长，等一下，视频马上就来,你可以先看这个')
-            let url44 = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + sp
-			
-			
-			
-			e.reply(segment.image(url44))
+            await SendMusicShare(e, { source: 'mys', name: spmz, artist: '原神', link: sp })
             //	console.log(response.data.content.content)
             //let jieguo = response.data.content.content
             //let sp = jieguo.match(/<video src="(.*?).mp4/g);
@@ -212,10 +210,27 @@ export class GenshinPV extends plugin {
             //e.reply('好的，请稍等哦')
 
 
-           
+            await fetch(sp, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                },
+            }).then(res => res.buffer()).then(_ => {
+                fs.writeFile("./resources/pv.mp4", _, "binary", function (err) {
+                    if (err)
+                        console.error(err);
+                    else
+                        console.log("下载成功");
+                });
+            })
+
+            let msg = await segment.video('./resources/pv.mp4')
             kg = 0
 
-          
+            await e.reply(msg)
+            e.reply('哎诶诶，视频来咯~~~')
+            await sleep(1000)
+            fs.unlinkSync('./resources/pv.mp4')
         }
     }
 }

@@ -1,12 +1,7 @@
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import fetch from "node-fetch";
 import fs from "fs";
-import {
-    createRequire
-}
-    from 'module'
-import YAML from 'yaml'
-const require = createRequire(import.meta.url)
+
 let ks = 0
 let data1 = {}
 let ml = process.cwd()
@@ -15,21 +10,6 @@ let user_id2 = ""
 let ks2 = 0
 let ren = []
 let renmin = []
-const { createOpenAPI, createWebsocket } = require('qq-guild-bot');
-
-const testConfig = {
-    appID: '102053599', // 申请机器人时获取到的机器人 BotAppID
-    token: 'ZLvgmBNoBoCD8rbB4toAMsjGBopUITvf', // 申请机器人时获取到的机器人 BotToken
-    intents: ['PUBLIC_GUILD_MESSAGES'], // 事件订阅,用于开启可接收的消息类型
-    sandbox: false, // 沙箱支持，可选，默认false. v2.7.0+
-};
-
-
-// 创建 client
-const client = createOpenAPI(testConfig);
-
-// 创建 websocket 连接
-const ws = createWebsocket(testConfig);
 export class MarryGroupFriends extends plugin {
     constructor() {
         super({
@@ -39,7 +19,7 @@ export class MarryGroupFriends extends plugin {
             dsc: '',
             event: 'message',
             /** 优先级，数字越小等级越高 */
-            priority: 115,
+            priority: 1145,
             rule: [
 
                 {
@@ -76,14 +56,7 @@ export class MarryGroupFriends extends plugin {
     async jrlp(e) {
         if (e.msg.includes('抢群友')) {
             let user_id2 = e.at
-            let data = await client.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
-
-            let res = data.data
-            console.log(res.length)
-          
-	        let  n = res.findIndex(item => item.user.id == user_id2) 
-
-            let name = res[n].nick
+            let name = Bot.pickMember(e.group_id, user_id2).card
 
 
 
@@ -126,12 +99,12 @@ export class MarryGroupFriends extends plugin {
 
             }
 
-            let dx = { "man": e.user_id, "woman": user_id2 ,"tx1":e.author.avatar ,"tx2":res[n].user.avatar }
-            let lm = { "man":  e.author.username, "woman": name }
+            let dx = { "man": e.user_id, "woman": user_id2 }
+            let lm = { "man": e.member.card, "woman": name }
             ren.push(dx)
             renmin.push(lm)
 
-            let a = res[n].user.avatar
+            let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + user_id2 + '&spec=5'
             let msg = [segment.at(e.user_id), '\n你成功的抢到了她', segment.image(a), name, '(' + String(user_id2) + ')', '\n运气不错嘛']
             await e.reply(msg)
             return
@@ -147,15 +120,14 @@ export class MarryGroupFriends extends plugin {
             }
 
             if (i1 > 0) {
-                let a = ren[i1 - 1].tx2
-                console.log(a)
+                let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + ren[i1 - 1].woman + '&spec=5'
                 let msg = [segment.at(e.user_id), '\n你今天的老婆是', segment.image(a), renmin[i1 - 1].woman, '(' + String(ren[i1 - 1].woman) + ')', '\n看好她哦，别让她被抢走了。']
                 await e.reply(msg)
                 return
 
             }
             if (i2 > 0) {
-                let a =  ren[i2 - 1].tx1
+                let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + ren[i2 - 1].man + '&spec=5'
                 let msg = [segment.at(e.user_id), '\n你今天的老公是', segment.image(a), renmin[i2 - 1].man, '(' + String(ren[i2 - 1].man) + ')', '\n看好她哦，别让她被抢走了。']
                 await e.reply(msg)
                 return
@@ -214,15 +186,10 @@ export class MarryGroupFriends extends plugin {
                 e.reply('你个自恋狂，是想自己和自己结婚吗？真够离谱的')
                 return
             }
-            let data = await client.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
-            let res = data.data
-            console.log(res.length)
-          
-	        let  n = res.findIndex(item => item.user.id == user_id2) 
 
-            let name = res[n].nick
-
+            let name = Bot.pickMember(e.group_id, user_id2).card
+            
 
 
             let i1 = ren.findIndex(item => item.man == e.user_id) + 1
@@ -240,14 +207,14 @@ export class MarryGroupFriends extends plugin {
             if (i1 + i2 != 0) {
 
                 if (i1 != 0) {
-                  
-                    let msg = [segment.at(e.user_id), '\n你今天已经有老婆啦',  renmin[i1 - 1].woman, '(' + String(ren[i1 - 1].woman) + ')', "\n别三心二意了！好好珍惜她！"]
+                    let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + ren[i1 - 1].woman + '&spec=5'
+                    let msg = [segment.at(e.user_id), '\n你今天已经有老婆啦', segment.image(a), renmin[i1 - 1].woman, '(' + String(ren[i1 - 1].woman) + ')', "\n别三心二意了！好好珍惜她！"]
                     e.reply(msg)
                     return
                 }
                 if (i2 != 0) {
-                 
-                    let msg = [segment.at(e.user_id), '\n你今天已经被他娶走啦', renmin[i2 - 1].man, '(' + String(ren[i2 - 1].man) + ')', "\n别三心二意了！好好珍惜她！"]
+                    let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + ren[i2 - 1].man + '&spec=5'
+                    let msg = [segment.at(e.user_id), '\n你今天已经被他娶走啦', segment.image(a), renmin[i2 - 1].man, '(' + String(ren[i2 - 1].man) + ')', "\n别三心二意了！好好珍惜她！"]
                     e.reply(msg)
                     return
                 }
@@ -256,12 +223,12 @@ export class MarryGroupFriends extends plugin {
 
             }
 
-            let dx = { "man": e.user_id, "woman": user_id2 ,"tx1":e.author.avatar ,"tx2":res[n].user.avatar }
-            let lm = { "man": e.author.username, "woman": name }
+            let dx = { "man": e.user_id, "woman": user_id2 }
+            let lm = { "man": e.member.card, "woman": name }
             ren.push(dx)
             renmin.push(lm)
-            let a = res[n].user.avatar
-            let msg = [segment.at(e.user_id), '\n你今天的老婆是', segment.image(a), name, '\n看好她哦，别让她被抢走了。']
+            let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + user_id2 + '&spec=5'
+            let msg = [segment.at(e.user_id), '\n你今天的老婆是', segment.image(a), name, '(' + String(user_id2) + ')', '\n看好她哦，别让她被抢走了。']
             await e.reply(msg)
             return
 
@@ -288,12 +255,12 @@ export class MarryGroupFriends extends plugin {
             if (i1 + i2 != 0) {
 
                 if (i1 != 0) {
-                    let a = ren[i1 - 1].tx2
+                    let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + ren[i1 - 1].woman + '&spec=5'
                     let msg = [segment.at(e.user_id), '\n你今天已经有老婆啦', segment.image(a), renmin[i1 - 1].woman, '(' + String(ren[i1 - 1].woman) + ')', "\n别三心二意了！好好珍惜她！"]
                     e.reply(msg)
                 }
                 if (i2 != 0) {
-                    let a = ren[i2 - 1].tx1
+                    let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + ren[i2 - 1].man + '&spec=5'
                     let msg = [segment.at(e.user_id), '\n你今天已经他被娶走啦', segment.image(a), renmin[i2 - 1].man, '(' + String(ren[i2 - 1].man) + ')', "\n别三心二意了！好好珍惜她！"]
                     e.reply(msg)
                 }
@@ -304,22 +271,17 @@ export class MarryGroupFriends extends plugin {
 
             }
 
-           
+            let lb = ""
+            lb = e.group.getMemberMap()
+
+            let mmap = await e.group.getMemberMap();
 
 
+            let arrMember = Array.from(mmap.values()).filter(member => member.level == 1);;
 
-
-
-
-            let data = await client.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
-
-            let res = data.data
-            console.log(res.length)
-
-            
             let qcy = []
-            for (let i = 0; i < res.length; i++) {
-                qcy[i] = res[i].user.id
+            for (let i = 0; i < arrMember.length; i++) {
+                qcy[i] = arrMember[i].user_id
             }
 
             var QAurl3 = "./resources/Earth-K-Plugin-" + "娶群友列表" + ".txt";
@@ -334,35 +296,35 @@ export class MarryGroupFriends extends plugin {
             })
 
 
-            let n = Math.floor(Math.random() * res.length);
+            let n = Math.floor(Math.random() * arrMember.length);
 
-            i1 = ren.findIndex(item => item.man == res[n].user.id) + 1
-            i2 = ren.findIndex(item => item.woman == res[n].user.id) + 1
+            i1 = ren.findIndex(item => item.man == arrMember[n].user_id) + 1
+            i2 = ren.findIndex(item => item.woman == arrMember[n].user_id) + 1
 
 
 
             if (i1 + i2 != 0) {
 
-                e.reply(['你娶到的人是', segment.at(res[n].user.id), ',但是她已经被娶走了。'])
+                e.reply(['你娶到的人是', segment.at(arrMember[n].user_id), ',但是她已经被娶走了。'])
                 return
             }
 
             //let a = 'http://xiaobapi.top/api/xb/api/qqlogo.php?&qq='+arrMember[n].user_id+'&s=100'
-            if (e.user_id == res[n].user.id) {
+            if (e.user_id == arrMember[n].user_id) {
                 let msg = [segment.at(e.user_id), '你今天是单身贵族哦']
                 e.reply(msg)
                 return
             }
-            let dx = { "man": e.user_id, "woman": res[n].user.id ,"tx1":e.author.avatar ,"tx2":res[n].user.avatar}
-            let lm = { "man": e.author.username, "woman": res[n].nick  }
+            let dx = { "man": e.user_id, "woman": arrMember[n].user_id }
+            let lm = { "man": e.member.card, "woman": arrMember[n].nickname }
             ren.push(dx)
             renmin.push(lm)
 
 
 
 
-            let a = res[n].user.avatar
-            let msg = [segment.at(e.user_id), '\n你今天的老婆是', segment.image(a),  res[n].nick, '\n看好她哦，别让她被抢走了。']
+            let a = 'http://q2.qlogo.cn/headimg_dl?dst_uin=' + arrMember[n].user_id + '&spec=5'
+            let msg = [segment.at(e.user_id), '\n你今天的老婆是', segment.image(a), arrMember[n].nickname, '(' + String(arrMember[n].user_id) + ')', '\n看好她哦，别让她被抢走了。']
             await e.reply(msg)
 
 
