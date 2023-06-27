@@ -1,4 +1,4 @@
-import puppeteer from "../../../lib/puppeteer/puppeteer.js";
+import puppeteer from "../../lib/puppeteer/puppeteer.js";
 import fetch from "node-fetch";
 import fs from "fs";
 import {
@@ -20,7 +20,7 @@ export class MarryGroupFriends extends plugin {
     constructor() {
         super({
             /** 功能名称 */
-            name: '[土块插件]娶群友',
+            name: '[土块插件2]娶群友',
             /** 功能描述 */
             dsc: '',
             event: 'message',
@@ -62,7 +62,7 @@ export class MarryGroupFriends extends plugin {
     async jrlp(e) {
         if (e.msg.includes('抢群友')) {
             let user_id2 = e.at
-            let data = await e.bot.ai.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
+            let data = await e.bot.api.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
             let res = data.data
             console.log(res.length)
@@ -70,6 +70,7 @@ export class MarryGroupFriends extends plugin {
 	        let  n = res.findIndex(item => item.user.id == user_id2) 
 
             let name = res[n].nick
+
 
 
 
@@ -200,7 +201,7 @@ export class MarryGroupFriends extends plugin {
                 e.reply('你个自恋狂，是想自己和自己结婚吗？真够离谱的')
                 return
             }
-            let data = await e.bot.ai.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
+            let data = await e.bot.api.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
             let res = data.data
             console.log(res.length)
@@ -297,7 +298,7 @@ export class MarryGroupFriends extends plugin {
 
 
 
-            let data = await e.bot.ai.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
+            let data = await e.bot.api.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
             let res = data.data
             console.log(res.length)
