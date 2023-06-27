@@ -62,7 +62,7 @@ export class MarryGroupFriends extends plugin {
     async jrlp(e) {
         if (e.msg.includes('抢群友')) {
             let user_id2 = e.at
-            let data = await client.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
+            let data = await e.bot.ai.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
             let res = data.data
             console.log(res.length)
@@ -200,7 +200,7 @@ export class MarryGroupFriends extends plugin {
                 e.reply('你个自恋狂，是想自己和自己结婚吗？真够离谱的')
                 return
             }
-            let data = await client.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
+            let data = await e.bot.ai.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
             let res = data.data
             console.log(res.length)
@@ -297,7 +297,7 @@ export class MarryGroupFriends extends plugin {
 
 
 
-            let data = await client.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
+            let data = await e.bot.ai.guildApi.guildMembers(e.guild_id, { 'limit': 500 });
 
             let res = data.data
             console.log(res.length)
