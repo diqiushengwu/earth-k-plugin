@@ -196,7 +196,7 @@ export class xgn extends plugin {
   }
   async jrys (e) {
 	  console.log(e.user_id,1233123123)
-     let url = 'https://tukuai.ddns.net:1450/jrys.php?&qq=' + String(e.user_id).slice(0, 8)
+     let url = 'http://tukuai.hopto.org:1450/jrys.php?&qq=' + String(e.user_id).slice(0, 8)
         let res = await fetch(url)
         res = await res.json()
 		console.log(res)
